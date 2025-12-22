@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Quest Log - Full Master Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        [x-cloak] { display: none !important; }
+        .quest-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .completed { border-color: #10b981 !important; background: rgba(6, 78, 59, 0.15) !important; }
+    </style>
+</head>
+<body class="bg-[#0b0f1a] text-slate-200 min-h-screen pb-40" x-data="questStore()">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[10%] -right-[10%] w-[40%] h-[60%] bg-purple-600/10 blur-[120px] rounded-full"></div>
+    </div>
+
+    <header class="relative pt-16 pb-12 px-6 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase mb-6 shadow-lg shadow-emerald-500/5">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            System Online: 10 Missions Available
+        </div>
+        <h1 class="text-6xl font-black tracking-tighter text-white mb-3">ML <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400">QUEST</span></h1>
+        <p class="text-slate-400 text-lg max-w-xl mx-auto font-light">Jalur pembelajaran Machine Learning terstruktur untuk menjadi <span class="text-white font-medium italic">Expert Data Scientist</span>.</p>
+    </header>
+
+    <main class="relative max-w-4xl mx-auto px-6 space-y-20">
+        
+        <template x-for="(world, index) in data" :key="index">
+            <section>
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-xl"
+                             :class="world.color">
+                            <i :class="world.icon + ' text-xl'"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black tracking-tight text-white uppercase" x-text="world.name"></h2>
+                            <p class="text-xs text-slate-500 font-mono" x-text="world.subtitle"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-5">
+                    <template x-for="stage in world.stages" :key="stage.id">
+                        <div class="quest-card group relative border border-slate-800 bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-6 hover:border-slate-600 transition-all"
+                             :class="isDone(stage.id) ? 'completed shadow-[0_0_20px_rgba(16,185,129,0.1)]' : ''">
+                            
+                            <div class="flex items-start gap-5 flex-grow">
+                                <button @click="toggle(stage.id)" 
+                                        class="mt-1 flex-shrink-0 w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-500"
+                                        :class="isDone(stage.id) ? 'bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/20 text-white' : 'border-slate-700 text-slate-700 hover:border-blue-500 group-hover:bg-slate-800'">
+                                    <i class="fas fa-check text-2xl" x-show="isDone(stage.id)"></i>
+                                    <i class="fas fa-terminal text-sm opacity-50" x-show="!isDone(stage.id)"></i>
+                                </button>
+
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-3 mb-1.5">
+                                        <span class="text-[10px] font-black uppercase tracking-[0.15em] px-2 py-0.5 rounded bg-slate-800 text-slate-400" x-text="stage.tag"></span>
+                                        <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest" x-text="stage.algo"></span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-1 group-hover:text-blue-300 transition-colors" x-text="stage.title"></h3>
+                                    <p class="text-sm text-slate-400 leading-relaxed" x-text="stage.desc"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-row md:flex-col items-center md:items-end justify-between gap-4 border-t border-slate-800/50 md:border-t-0 pt-5 md:pt-0">
+                                <a :href="stage.link" target="_blank" 
+                                   class="group/btn flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-blue-600 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all border border-white/10 hover:border-blue-400">
+                                    <i class="fab fa-kaggle text-blue-400 group-hover/btn:text-white transition-colors"></i> 
+                                    Dataset
+                                </a>
+                                <div class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/5 px-3 py-1.5 rounded-lg border border-emerald-500/20 shadow-inner" 
+                                     x-text="stage.target"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </template>
+    </main>
+
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-50">
+        <div class="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 transition-all duration-1000" :style="`width: ${progress}%` text-align: center"></div>
+            
+            <div class="relative flex items-center justify-between gap-8">
+                <div class="flex-grow">
+                    <div class="flex justify-between text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-3">
+                        <span>Completion Rate</span>
+                        <span class="text-emerald-400" x-text="progress + '%'"></span>
+                    </div>
+                    <div class="h-3 w-full bg-slate-800/50 rounded-full overflow-hidden p-[3px] border border-white/5">
+                        <div class="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-400 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(52,211,153,0.3)]"
+                             :style="`width: ${progress}%` text-align: center"></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button @click="resetProgress()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-800 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all border border-white/5">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function questStore() {
+            return {
+                checked: [],
+                data: [
+                    {
+                        name: 'Classification',
+                        subtitle: 'Teaching machines to categorize',
+                        icon: 'fas fa-shield-halved',
+                        color: 'from-blue-600 to-indigo-600',
+                        stages: [
+                            { id: 'c1', tag: 'Stage 1', algo: 'KNN', title: 'Garden of Iris', desc: 'Predicting flower species based on physical measurements.', target: 'Acc > 95%', link: 'https://www.kaggle.com/datasets/uciml/iris' },
+                            { id: 'c2', tag: 'Stage 2', algo: 'Logistic Reg.', title: 'Titanic Survival', desc: 'Data cleaning and handling missing records of passengers.', target: 'Acc > 78%', link: 'https://www.kaggle.com/competitions/titanic/data' },
+                            { id: 'c3', tag: 'Stage 3', algo: 'Random Forest', title: 'Heart Disease', desc: 'Scaling features and balancing medical diagnosis data.', target: 'Recall > 85%', link: 'https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset' },
+                            { id: 'c4', tag: 'Boss Stage', algo: 'Naive Bayes', title: 'SMS Spam Detector', desc: 'Vectorizing text to distinguish between ham and spam.', target: 'F1 > 90%', link: 'https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset' }
+                        ]
+                    },
+                    {
+                        name: 'Regression',
+                        subtitle: 'Predicting continuous values',
+                        icon: 'fas fa-chart-line',
+                        color: 'from-amber-500 to-orange-600',
+                        stages: [
+                            { id: 'r1', tag: 'Basic', algo: 'Linear Reg.', title: 'Salary Prediction', desc: 'Predicting income based on years of experience.', target: 'R² > 0.90', link: 'https://www.kaggle.com/datasets/abhishek14398/salary-data-simple-linear-regression' },
+                            { id: 'r2', tag: 'Intermediate', algo: 'Polynomial Reg.', title: 'Medical Insurance', desc: 'Analyzing how BMI and age affect insurance premiums.', target: 'MAE < $2k', link: 'https://www.kaggle.com/datasets/mirichoi0218/insurance' },
+                            { id: 'r3', tag: 'Final Boss', algo: 'XGBoost', title: 'House Prices', desc: 'Advanced engineering and handling price outliers.', target: 'RMSLE < 0.15', link: 'https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data' }
+                        ]
+                    },
+                    {
+                        name: 'Unsupervised',
+                        subtitle: 'Finding hidden patterns',
+                        icon: 'fas fa-atom',
+                        color: 'from-emerald-500 to-teal-600',
+                        stages: [
+                            { id: 'u1', tag: 'Stage 1', algo: 'K-Means', title: 'Customer Segmentation', desc: 'Grouping mall visitors by income and spending scores.', target: 'ELBOW METHOD', link: 'https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python' },
+                            { id: 'u2', tag: 'Stage 2', algo: 'DBSCAN', title: 'Wholesale Customers', desc: 'Detecting outliers and density-based groups in trade data.', target: 'DENDROGRAM', link: 'https://www.kaggle.com/datasets/binovi/wholesale-customers-data-set' },
+                            { id: 'u3', tag: 'Stage 3', algo: 'PCA', title: 'The Library of Dimension', desc: 'Reducing 100+ features into 2D/3D visualizations.', target: 'VAR > 70%', link: 'https://www.kaggle.com/datasets/yasserh/wine-quality-dataset' }
+                        ]
+                    }
+                ],
+                init() {
+                    this.checked = JSON.parse(localStorage.getItem('ml_quests_v3') || '[]');
+                },
+                toggle(id) {
+                    if (this.checked.includes(id)) {
+                        this.checked = this.checked.filter(i => i !== id);
+                    } else {
+                        this.checked.push(id);
+                    }
+                    localStorage.setItem('ml_quests_v3', JSON.stringify(this.checked));
+                },
+                isDone(id) { return this.checked.includes(id); },
+                get progress() {
+                    const total = 10;
+                    return Math.round((this.checked.length / total) * 100);
+                },
+                resetProgress() {
+                    if(confirm('Apakah kamu yakin ingin menghapus semua progress?')) {
+                        this.checked = [];
+                        localStorage.removeItem('ml_quests_v3');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
