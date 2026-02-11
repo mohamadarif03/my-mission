@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Quest Log - Full Master Edition</title>
+    <title>ML Hero Path - Zero to Deep Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -26,10 +26,10 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            System Online: 10 Missions Available
+            System Online: <span x-text="totalQuests"></span> Missions Available
         </div>
-        <h1 class="text-6xl font-black tracking-tighter text-white mb-3">ML <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400">QUEST</span></h1>
-        <p class="text-slate-400 text-lg max-w-xl mx-auto font-light">Jalur pembelajaran Machine Learning terstruktur untuk menjadi <span class="text-white font-medium italic">Expert Data Scientist</span>.</p>
+        <h1 class="text-6xl font-black tracking-tighter text-white mb-3">ML <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400">HERO PATH</span></h1>
+        <p class="text-slate-400 text-lg max-w-xl mx-auto font-light">Roadmap dataset latihan dari nol → mahir → siap ke <span class="text-white font-medium italic">Deep Learning</span>.</p>
     </header>
 
     <main class="relative max-w-4xl mx-auto px-6 space-y-20">
@@ -44,7 +44,7 @@
                         </div>
                         <div>
                             <h2 class="text-2xl font-black tracking-tight text-white uppercase" x-text="world.name"></h2>
-                            <p class="text-xs text-slate-500 font-mono" x-text="world.subtitle"></p>
+                            <p class="text-sm text-slate-500 font-mono" x-text="world.subtitle"></p>
                         </div>
                     </div>
                 </div>
@@ -59,13 +59,13 @@
                                         class="mt-1 flex-shrink-0 w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-500"
                                         :class="isDone(stage.id) ? 'bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/20 text-white' : 'border-slate-700 text-slate-700 hover:border-blue-500 group-hover:bg-slate-800'">
                                     <i class="fas fa-check text-2xl" x-show="isDone(stage.id)"></i>
-                                    <i class="fas fa-terminal text-sm opacity-50" x-show="!isDone(stage.id)"></i>
+                                    <i class="fas fa-code text-sm opacity-50" x-show="!isDone(stage.id)"></i>
                                 </button>
 
                                 <div class="flex-grow">
                                     <div class="flex items-center gap-3 mb-1.5">
-                                        <span class="text-[10px] font-black uppercase tracking-[0.15em] px-2 py-0.5 rounded bg-slate-800 text-slate-400" x-text="stage.tag"></span>
-                                        <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest" x-text="stage.algo"></span>
+                                        <span class="text-[10px] font-black uppercase tracking-[0.15em] px-2 py-0.5 rounded bg-slate-800 text-slate-400" x-text="stage.skill"></span>
+                                        <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest" x-text="stage.task"></span>
                                     </div>
                                     <h3 class="text-xl font-bold text-white mb-1 group-hover:text-blue-300 transition-colors" x-text="stage.title"></h3>
                                     <p class="text-sm text-slate-400 leading-relaxed" x-text="stage.desc"></p>
@@ -78,8 +78,6 @@
                                     <i class="fab fa-kaggle text-blue-400 group-hover/btn:text-white transition-colors"></i> 
                                     Dataset
                                 </a>
-                                <div class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/5 px-3 py-1.5 rounded-lg border border-emerald-500/20 shadow-inner" 
-                                     x-text="stage.target"></div>
                             </div>
                         </div>
                     </template>
@@ -90,7 +88,7 @@
 
     <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-50">
         <div class="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden relative">
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 transition-all duration-1000" :style="`width: ${progress}%` text-align: center"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 transition-all duration-1000" :style="`width: ${progress}%`"></div>
             
             <div class="relative flex items-center justify-between gap-8">
                 <div class="flex-grow">
@@ -100,7 +98,7 @@
                     </div>
                     <div class="h-3 w-full bg-slate-800/50 rounded-full overflow-hidden p-[3px] border border-white/5">
                         <div class="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-400 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(52,211,153,0.3)]"
-                             :style="`width: ${progress}%` text-align: center"></div>
+                             :style="`width: ${progress}%`"></div>
                     </div>
                 </div>
                 
@@ -119,42 +117,78 @@
                 checked: [],
                 data: [
                     {
-                        name: 'Classification',
-                        subtitle: 'Teaching machines to categorize',
-                        icon: 'fas fa-shield-halved',
-                        color: 'from-blue-600 to-indigo-600',
+                        name: 'LEVEL 1 — Pemula',
+                        subtitle: 'EDA + Regresi / Klasifikasi Dasar',
+                        icon: 'fas fa-seedling',
+                        color: 'from-emerald-400 to-cyan-500',
                         stages: [
-                            { id: 'c1', tag: 'Stage 1', algo: 'KNN', title: 'Garden of Iris', desc: 'Predicting flower species based on physical measurements.', target: 'Acc > 95%', link: 'https://www.kaggle.com/datasets/uciml/iris' },
-                            { id: 'c2', tag: 'Stage 2', algo: 'Logistic Reg.', title: 'Titanic Survival', desc: 'Data cleaning and handling missing records of passengers.', target: 'Acc > 78%', link: 'https://www.kaggle.com/competitions/titanic/data' },
-                            { id: 'c3', tag: 'Stage 3', algo: 'Random Forest', title: 'Heart Disease', desc: 'Scaling features and balancing medical diagnosis data.', target: 'Recall > 85%', link: 'https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset' },
-                            { id: 'c4', tag: 'Boss Stage', algo: 'Naive Bayes', title: 'SMS Spam Detector', desc: 'Vectorizing text to distinguish between ham and spam.', target: 'F1 > 90%', link: 'https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset' }
+                            { id: 'l1-1', skill: 'Regresi, EDA', task: 'Prediksi Charges', title: 'Medical Insurance', desc: 'Analisis biaya asuransi berdasarkan data kesehatan.', link: 'https://www.kaggle.com/datasets/mirichoi0218/insurance' },
+                            { id: 'l1-2', skill: 'Klasifikasi', task: 'Prediksi Survive', title: 'Titanic', desc: 'Prediksi keselamatan penumpang Titanic.', link: 'https://www.kaggle.com/c/titanic' },
+                            { id: 'l1-3', skill: 'ML Dasar', task: 'Klasifikasi Bunga', title: 'Iris Dataset', desc: 'Klasifikasi spesies bunga berdasarkan ukuran kelopak.', link: 'https://www.kaggle.com/datasets/uciml/iris' },
+                            { id: 'l1-4', skill: 'Regresi', task: 'Prediksi Nilai', title: 'Student Performance', desc: 'Analisis performa siswa dalam ujian.', link: 'https://www.kaggle.com/datasets/spscientist/students-performance-in-exams' },
+                            { id: 'l1-5', skill: 'Klasifikasi', task: 'Prediksi Penyakit', title: 'Heart Disease', desc: 'Deteksi kemungkinan penyakit jantung.', link: 'https://www.kaggle.com/datasets/ronitf/heart-disease-uci' }
                         ]
                     },
                     {
-                        name: 'Regression',
-                        subtitle: 'Predicting continuous values',
-                        icon: 'fas fa-chart-line',
-                        color: 'from-amber-500 to-orange-600',
+                        name: 'LEVEL 2 — Menengah',
+                        subtitle: 'Feature Engineering & Model Tuning',
+                        icon: 'fas fa-cogs',
+                        color: 'from-yellow-400 to-orange-500',
                         stages: [
-                            { id: 'r1', tag: 'Basic', algo: 'Linear Reg.', title: 'Salary Prediction', desc: 'Predicting income based on years of experience.', target: 'R² > 0.90', link: 'https://www.kaggle.com/datasets/abhishek14398/salary-data-simple-linear-regression' },
-                            { id: 'r2', tag: 'Intermediate', algo: 'Polynomial Reg.', title: 'Medical Insurance', desc: 'Analyzing how BMI and age affect insurance premiums.', target: 'MAE < $2k', link: 'https://www.kaggle.com/datasets/mirichoi0218/insurance' },
-                            { id: 'r3', tag: 'Final Boss', algo: 'XGBoost', title: 'House Prices', desc: 'Advanced engineering and handling price outliers.', target: 'RMSLE < 0.15', link: 'https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data' }
+                            { id: 'l2-1', skill: 'Feature Engineering', task: 'Harga Rumah', title: 'House Prices', desc: 'Prediksi harga rumah dengan teknik feature engineering.', link: 'https://www.kaggle.com/c/house-prices-advanced-regression-techniques' },
+                            { id: 'l2-2', skill: 'Klasifikasi', task: 'Prediksi Churn', title: 'Telco Churn', desc: 'Analisis pelanggan yang berhenti berlangganan.', link: 'https://www.kaggle.com/datasets/blastchar/telco-customer-churn' },
+                            { id: 'l2-3', skill: 'Imbalanced Data', task: 'Deteksi Fraud', title: 'Credit Card Fraud', desc: 'Mendeteksi transaksi penipuan kartu kredit.', link: 'https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud' },
+                            { id: 'l2-4', skill: 'Regresi Non-linear', task: 'Prediksi Harga', title: 'Car Price', desc: 'Estimasi harga mobil bekas.', link: 'https://www.kaggle.com/datasets/hellbuoy/car-price-prediction' }
                         ]
                     },
                     {
-                        name: 'Unsupervised',
-                        subtitle: 'Finding hidden patterns',
-                        icon: 'fas fa-atom',
-                        color: 'from-emerald-500 to-teal-600',
+                        name: 'LEVEL 3 — Lanjut',
+                        subtitle: 'Tree, Boosting, Interpretasi',
+                        icon: 'fas fa-rocket',
+                        color: 'from-red-500 to-pink-600',
                         stages: [
-                            { id: 'u1', tag: 'Stage 1', algo: 'K-Means', title: 'Customer Segmentation', desc: 'Grouping mall visitors by income and spending scores.', target: 'ELBOW METHOD', link: 'https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python' },
-                            { id: 'u2', tag: 'Stage 2', algo: 'DBSCAN', title: 'Wholesale Customers', desc: 'Detecting outliers and density-based groups in trade data.', target: 'DENDROGRAM', link: 'https://www.kaggle.com/datasets/binovi/wholesale-customers-data-set' },
-                            { id: 'u3', tag: 'Stage 3', algo: 'PCA', title: 'The Library of Dimension', desc: 'Reducing 100+ features into 2D/3D visualizations.', target: 'VAR > 70%', link: 'https://www.kaggle.com/datasets/yasserh/wine-quality-dataset' }
+                            { id: 'l3-1', skill: 'RF, Boosting', task: 'Harga Rumah', title: 'California Housing', desc: 'Prediksi harga rumah di California menggunakan Random Forest.', link: 'https://www.kaggle.com/datasets/camnugent/california-housing-prices' },
+                            { id: 'l3-2', skill: 'Fairness, Interpretasi', task: 'Income >50K', title: 'Adult Income', desc: 'Klasifikasi pendapatan dewasa sensus AS.', link: 'https://www.kaggle.com/datasets/wenruliu/adult-income-dataset' },
+                            { id: 'l3-3', skill: 'ROC, Precision/Recall', task: 'Term Deposit', title: 'Bank Marketing', desc: 'Prediksi nasabah yang akan deposito.', link: 'https://www.kaggle.com/datasets/janiobachmann/bank-marketing-dataset' },
+                            { id: 'l3-4', skill: 'Multivariate Reg.', task: 'Konsumsi Energi', title: 'Energy Efficiency', desc: 'Analisis efisiensi energi bangunan.', link: 'https://www.kaggle.com/datasets/uci-machine-learning-repository/energy-efficiency-data-set' }
+                        ]
+                    },
+                    {
+                        name: 'LEVEL 4 — Siap Deep Learning',
+                        subtitle: 'CNN, RNN, Transformer Basics',
+                        icon: 'fas fa-brain',
+                        color: 'from-violet-500 to-purple-600',
+                        stages: [
+                            { id: 'l4-1', skill: 'CNN', task: 'Digit Recognition', title: 'MNIST', desc: 'Pengenalan tulisan tangan angka digit.', link: 'https://www.kaggle.com/c/digit-recognizer' },
+                            { id: 'l4-2', skill: 'CNN', task: 'Image Class.', title: 'Fashion MNIST', desc: 'Klasifikasi gambar pakaian dan aksesoris.', link: 'https://www.kaggle.com/datasets/zalando-research/fashionmnist' },
+                            { id: 'l4-3', skill: 'NLP', task: 'Sentiment Analysis', title: 'IMDB Reviews', desc: 'Analisis sentimen review film.', link: 'https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews' },
+                            { id: 'l4-4', skill: 'LSTM', task: 'Time Series', title: 'NYC Taxi', desc: 'Prediksi durasi perjalanan taksi NYC.', link: 'https://www.kaggle.com/c/nyc-taxi-trip-duration' },
+                            { id: 'l4-5', skill: 'Transfer Learning', task: 'Binary Class.', title: 'Dogs vs Cats', desc: 'Klasifikasi gambar anjing dan kucing.', link: 'https://www.kaggle.com/c/dogs-vs-cats' }
+                        ]
+                    },
+                    {
+                        name: '🚀 Challenge Path (Opsional)',
+                        subtitle: 'Real-world Applications',
+                        icon: 'fas fa-trophy',
+                        color: 'from-fuchsia-500 to-rose-500',
+                        stages: [
+                            { id: 'c-1', skill: 'Recommender', task: 'Rekomendasi Lagu', title: 'Spotify Dataset', desc: 'Sistem rekomendasi musik Spotify.', link: 'https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-160k-tracks' },
+                            { id: 'c-2', skill: 'Churn & Segmentation', task: 'E-commerce', title: 'E-commerce Behavior', desc: 'Analisis perilaku pelanggan e-commerce.', link: 'https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store' },
+                            { id: 'c-3', skill: 'Pricing Strategy', task: 'Harga Sewa', title: 'Airbnb Listings', desc: 'Optimasi harga sewa Airbnb.', link: 'https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data' }
                         ]
                     }
                 ],
+                get totalQuests() {
+                    return this.data.reduce((acc, world) => acc + world.stages.length, 0);
+                },
                 init() {
-                    this.checked = JSON.parse(localStorage.getItem('ml_quests_v3') || '[]');
+                    const saved = localStorage.getItem('ml_quests_v4');
+                    // Migration from v3 if exists and v4 is empty
+                    if (!saved && localStorage.getItem('ml_quests_v3')) {
+                         this.checked = JSON.parse(localStorage.getItem('ml_quests_v3'));
+                    } else {
+                         this.checked = JSON.parse(saved || '[]');
+                    }
                 },
                 toggle(id) {
                     if (this.checked.includes(id)) {
@@ -162,17 +196,17 @@
                     } else {
                         this.checked.push(id);
                     }
-                    localStorage.setItem('ml_quests_v3', JSON.stringify(this.checked));
+                    localStorage.setItem('ml_quests_v4', JSON.stringify(this.checked));
                 },
                 isDone(id) { return this.checked.includes(id); },
                 get progress() {
-                    const total = 10;
-                    return Math.round((this.checked.length / total) * 100);
+                    const total = this.totalQuests;
+                    return total === 0 ? 0 : Math.round((this.checked.length / total) * 100);
                 },
                 resetProgress() {
                     if(confirm('Apakah kamu yakin ingin menghapus semua progress?')) {
                         this.checked = [];
-                        localStorage.removeItem('ml_quests_v3');
+                        localStorage.removeItem('ml_quests_v4');
                     }
                 }
             }
